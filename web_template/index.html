@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="jp">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="ようこそString Converterへ。本サイトはString（文字列）を自由に操作・変換できるアプリケーションツールです。">
+    <link rel="stylesheet" href="./../css/default.css">
+    <title>String Converter</title>
+</head>
+
+<body>
+    <div class="parentBox">
+        <div class="leftBox">
+        </div>
+        <div class="container">
+            <div class="inputBox">
+                <form id="stringForm">
+                    <div class="optionBox">
+                        <input type="submit" value="変換" class="convertButton">
+                        <input type="radio" name="convert_type" value="upper" id="upper">
+                        <label for="upper">:大文字</label>
+                        <input type="radio" name="convert_type" value="lower" id="lower">
+                        <label for="lower">:小文字</label>
+                    </div>
+                    <div class="textBox">
+                        <textarea spellcheck="false" class="inputTextArea" id="inputTextArea"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="outputBox">
+                <div class="convertionBox">
+                    <span class="outputTitle">変換後</span><span class="convertionDispArea" id="convertionDispArea"></span>
+                </div>
+            </div>
+        </div>
+        <div class="rightBox">
+            <div class="rightBoxList">
+                <span class="outputTitle">文字数</span>
+                <span class="stringDispArea" id="stringLengthArea">0</span>
+            </div>
+            <div class="rightBoxList">
+                <span class="outputTitle">半角文字数</span>
+                <span class="stringDispArea" id="stringHankakuArea">0</span>
+            </div>
+            <div class="rightBoxList">
+                <span class="outputTitle">全角文字数</span>
+                <span class="stringDispArea" id="stringZenkakuArea">0</span>
+            </div>
+            <div class="rightBoxList">
+                <span class="outputTitle">バイト数（UTF-8）</span>
+                <span class="stringDispArea" id="stringByteArea">0</span>
+            </div>
+            <div class="rightBoxList">
+                <span class="outputTitle">バイト数（SJIS）</span>
+                <span class="stringDispArea" id="stringSjisArea">0</span>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="../script/index/indexController.js"></script>
+</body>
+
+</html>
