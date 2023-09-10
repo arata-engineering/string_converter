@@ -1,13 +1,4 @@
 import IndexBean from "./indexBean.js";
-/*
-document.getElementById("stringForm")?.addEventListener("submit", submitExecute);
-function submitExecute(event: Event): void {
-    const indexBean: IndexBean = IndexBean.createInstance();
-    indexBean.dispConvertedString();
-    event.stopPropagation();
-    event.preventDefault();
-}
-*/
 document.getElementById("stringForm")?.addEventListener("input", inputExecute);
 function inputExecute() {
     const indexBean = IndexBean.createInstance();
@@ -18,3 +9,12 @@ function inputExecute() {
     indexBean.dispStringZenkaku();
     indexBean.dispStringHankaku();
 }
+/*
+document.getElementById("stringForm")?.addEventListener("submit", submitExecute);
+function submitExecute(event: Event): void {
+    const indexBean: IndexBean = IndexBean.createInstance();
+    indexBean.dispConvertedString();
+    event.stopPropagation();
+    event.preventDefault();
+}
+*/ 

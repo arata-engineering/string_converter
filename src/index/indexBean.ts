@@ -1,12 +1,7 @@
-import { text } from "stream/consumers";
 import StringUtil from "../common/stringUtil.js";
+import { HTMLFormElement_Null, HtmlElement_Null } from "../type/typer.js";
 
 export default class IndexBean {
-    self: IndexBean;
-
-    constructor() {
-        this.self = this;
-    }
 
     static createInstance(): IndexBean {
         return new IndexBean();
@@ -18,7 +13,7 @@ export default class IndexBean {
      */
     dispConvertedString(): void {
         const convertedStr: string = this.convertString();
-        const textElement: HTMLElement | null = document.getElementById("convertionDispArea");
+        const textElement: HtmlElement_Null = document.getElementById("convertionDispArea");
         if (!textElement) {
             console.error("id:convertionDispAreaが存在しません");
             return;
@@ -31,8 +26,8 @@ export default class IndexBean {
      * @returns 
      */
     convertString(): string {
-        const textElement: HTMLElement | null = document.getElementById("inputTextArea");
-        const formElement: HTMLFormElement | null = (document.getElementById("stringForm") as HTMLFormElement | null);
+        const textElement: HtmlElement_Null = document.getElementById("inputTextArea");
+        const formElement: HTMLFormElement_Null = (document.getElementById("stringForm") as HTMLFormElement | null);
         const str: string = this.existsConvertionElement(textElement, formElement);
         if (str === "") {
             return "";
@@ -52,7 +47,7 @@ export default class IndexBean {
      * @param formElement 
      * @returns true:存在, false:存在しない
      */
-    existsConvertionElement(textElement: HTMLElement | null, formElement: HTMLFormElement | null): string {
+    existsConvertionElement(textElement: HtmlElement_Null, formElement: HTMLFormElement_Null): string {
         if (!textElement) {
             console.error("id:inputTextAreaが存在しません");
             return "";
@@ -72,8 +67,8 @@ export default class IndexBean {
     }
 
     dispStringLength(): void {
-        const textElement: HTMLElement | null = document.getElementById("inputTextArea");
-        const stringLengthArea: HTMLElement | null = document.getElementById("stringLengthArea");
+        const textElement: HtmlElement_Null = document.getElementById("inputTextArea");
+        const stringLengthArea: HtmlElement_Null = document.getElementById("stringLengthArea");
         if (!this.existsDsipElement(textElement, stringLengthArea, ()=>console.error("id:stringLengthAreaが存在しません。"))) {
             return;
         }
@@ -82,8 +77,8 @@ export default class IndexBean {
     }
 
     dispStringByte(): void {
-        const textElement: HTMLElement | null = document.getElementById("inputTextArea");
-        const stringLengthArea: HTMLElement | null = document.getElementById("stringByteArea");
+        const textElement: HtmlElement_Null = document.getElementById("inputTextArea");
+        const stringLengthArea: HtmlElement_Null = document.getElementById("stringByteArea");
         if (!this.existsDsipElement(textElement, stringLengthArea, ()=>console.error("id:stringByteAreaが存在しません。"))) {
             return;
         }
@@ -96,8 +91,8 @@ export default class IndexBean {
     }
 
     dispStringSjis(): void {
-        const textElement: HTMLElement | null = document.getElementById("inputTextArea");
-        const stringLengthArea: HTMLElement | null = document.getElementById("stringSjisArea");
+        const textElement: HtmlElement_Null = document.getElementById("inputTextArea");
+        const stringLengthArea: HtmlElement_Null = document.getElementById("stringSjisArea");
         if (!this.existsDsipElement(textElement, stringLengthArea, ()=>console.error("id:stringByteAreaが存在しません。"))) {
             return;
         }
@@ -106,8 +101,8 @@ export default class IndexBean {
     }
 
     dispStringZenkaku(): void {
-        const textElement: HTMLElement | null = document.getElementById("inputTextArea");
-        const stringLengthArea: HTMLElement | null = document.getElementById("stringZenkakuArea");
+        const textElement: HtmlElement_Null = document.getElementById("inputTextArea");
+        const stringLengthArea: HtmlElement_Null = document.getElementById("stringZenkakuArea");
         if (!this.existsDsipElement(textElement, stringLengthArea, ()=>console.error("id:stringZenkakuAreaが存在しません。"))) {
             return;
         }
@@ -116,8 +111,8 @@ export default class IndexBean {
     }
 
     dispStringHankaku(): void {
-        const textElement: HTMLElement | null = document.getElementById("inputTextArea");
-        const stringLengthArea: HTMLElement | null = document.getElementById("stringHankakuArea");
+        const textElement: HtmlElement_Null = document.getElementById("inputTextArea");
+        const stringLengthArea: HtmlElement_Null = document.getElementById("stringHankakuArea");
         if (!this.existsDsipElement(textElement, stringLengthArea, ()=>console.error("id:stringHankakuAreaが存在しません。"))) {
             return;
         }
@@ -158,7 +153,7 @@ export default class IndexBean {
         return length;
     }
 
-    existsDsipElement(textElement: HTMLElement | null, stringDispArea: HTMLElement | null, errorLog:()=>void): boolean {
+    existsDsipElement(textElement: HtmlElement_Null, stringDispArea: HtmlElement_Null, errorLog:()=>void): boolean {
         if (textElement === null) {
             console.error("id:inputTextAreaが存在しません。");
             return false;

@@ -1,8 +1,5 @@
 import StringUtil from "../common/stringUtil.js";
 export default class IndexBean {
-    constructor() {
-        this.self = this;
-    }
     static createInstance() {
         return new IndexBean();
     }
