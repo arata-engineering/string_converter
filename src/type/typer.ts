@@ -17,4 +17,5 @@ export type Sjis = "sjis";
 export type Utf8 = "utf8";
 export type Space = " ";
 export type NewLine = "\n";
-export type Charsets = Length | Sjis | Utf8 | Space | NewLine;
+export type Custom1 = "custom1";
+export type Charsets = Length | Sjis | Utf8 | Space | NewLine | Custom1;

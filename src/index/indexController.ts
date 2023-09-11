@@ -4,11 +4,7 @@ import IndexBean from "./indexBean.js";
 document.getElementById("stringForm")?.addEventListener("input", inputExecute);
 function inputExecute() {
     const indexBean: IndexBean = IndexBean.createInstance();
-    const utf8: Utf8 = "utf8";
-    const sjis: Sjis = "sjis";
-    const length: Length = "length";
-    const space: Space = " ";
-    const newLine: NewLine = "\n";
+    const [utf8, sjis, length, space, newLine, custom1] = IndexBean.getCharTypes();
 
     // コンバート文字列
     indexBean.dispConvertedString();
@@ -26,4 +22,6 @@ function inputExecute() {
     indexBean.dispStringContents(space, "stringSpaceArea", null);
     // 文字数(改行)
     indexBean.dispStringContents(newLine, "stringLineArea", null);
+    // 文字数(カスタム1)
+    indexBean.dispStringContents(custom1, "stringCustomArea1", null);
 }

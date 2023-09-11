@@ -1,7 +1,18 @@
 import StringUtil from "../common/stringUtil.js";
 export default class IndexBean {
+    /**
+     * インスタンスを返却します。
+     * @returns IndexBeanのインスタンス
+     */
     static createInstance() {
         return new IndexBean();
+    }
+    /**
+     * カウント方法を指定するリテラル型を全て返却します。
+     * @returns リテラル型を格納した配列
+     */
+    static getCharTypes() {
+        return ["utf8", "sjis", "length", " ", "\n", "custom1"];
     }
     /**
      * 変換した文字列を表示させます。
@@ -96,22 +107,26 @@ export default class IndexBean {
     /**
      * キャラセットによってカウント方法のメソッドを切替えます。
      * @param charset キャラセット
-     * @param inputWord 入力ワード
+     * @param inputedWord 入力ワード
      * @param countUp カウントアップ種別
      * @returns カウント数
      */
-    controlCountFunc(charset, inputWord, countUp) {
+    controlCountFunc(charset, inputedWord, countUp) {
         if (charset === "sjis") {
-            return this.getStringByCountType(inputWord, countUp);
+            return this.countByCountType(inputedWord, countUp);
         }
         else if (charset === "utf8") {
-            return this.getStringToByteOfUtf8(inputWord);
+            return this.countByteOfUtf8(inputedWord);
         }
         else if (charset === "length") {
-            return inputWord.length;
+            return inputedWord.length;
         }
         else if (charset === " " || charset === "\n") {
-            return this.getStringTargetWord(inputWord, charset);
+            return this.countTargetWord(inputedWord, charset);
+        }
+        else if (charset === "custom1") {
+            const customElement = document.getElementById("countForm");
+            return this.countCustomWord(customElement, inputedWord);
         }
         return 0;
     }
@@ -121,7 +136,7 @@ export default class IndexBean {
     * @param countUp
     * @returns
     */
-    getStringByCountType(str, countUp) {
+    countByCountType(str, countUp) {
         let length = 0;
         const isHankaku = (c) => (c >= 0x0 && c < 0x81) || (c === 0xf8f0) || (c >= 0xff61 && c < 0xffa0) || (c >= 0xf8f1 && c < 0xf8f4);
         for (let i = 0; i < str.length; i++) {
@@ -131,15 +146,60 @@ export default class IndexBean {
         return length;
     }
     /**
-     * UTF-8のサイズを取得します。
+     * UTF-8のバイト数を取得します。
      * @param str
-     * @returns UTF-8のサイズ
+     * @returns UTF-8のバイト
      */
-    getStringToByteOfUtf8(str) {
+    countByteOfUtf8(str) {
         return new Blob([str], { type: 'text/plain' }).size;
     }
-    getStringTargetWord(str, target) {
+    /**
+     * 文字列に含まれている対象の文字列のカウント数を取得します。
+     * @param str
+     * @param target
+     * @returns
+     */
+    countTargetWord(str, target) {
         return [...str].filter(c => c === target).length;
+    }
+    /**
+     * 文字列に含まれている対象の文字列のカウント数を取得します。
+     * @param str 全体の文字列
+     * @param target 検索の文字列
+     * @returns カウント数
+     */
+    countIncludingTargetWord(str, target) {
+        const regExp = new RegExp(target, "g");
+        return (str.match(regExp) || []).length;
+    }
+    /**
+     * カスタマイズカウント要素が存在するか判定します。
+     * @param customElement
+     * @returns
+     */
+    checkCustomWord(customElement) {
+        if (!customElement) {
+            console.error(`id:countFormが存在しません。`);
+            return false;
+        }
+        const customSearchWord = customElement.custom1.value;
+        // カスタム文字列が入力されてない場合はカウントしない
+        if (!customSearchWord) {
+            return false;
+        }
+        return true;
+    }
+    /**
+     * カスタムカウント文字列のカウント数を返却します。
+     * @param inputedWord 入力された文字列
+     * @returns カスタムカウント文字列のカウント数
+     */
+    countCustomWord(customElement, inputedWord) {
+        if (!this.checkCustomWord(customElement)) {
+            return 0;
+        }
+        const customSearchWord = customElement.custom1.value;
+        return this.countIncludingTargetWord(inputedWord, customSearchWord);
     }
     /**
      * 半角か判定します。
@@ -170,7 +230,7 @@ export default class IndexBean {
      * @returns
      */
     countUpZenkakuChar(c, length, isHankaku) {
-        if (isHankaku(c)) {
+        if (!isHankaku(c)) {
             length += 1;
         }
         return length;

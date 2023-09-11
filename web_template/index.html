@@ -16,6 +16,8 @@
             <div class="inputBox">
                 <form id="stringForm">
                     <div class="optionBox">
+                        <input type="radio" name="convert_type" value="noChange" id="noChange">
+                        <label for="noChange">:無変換</label>
                         <input type="radio" name="convert_type" value="upper" id="upper">
                         <label for="upper">:大文字</label>
                         <input type="radio" name="convert_type" value="lower" id="lower">
@@ -28,43 +30,46 @@
             </div>
             <div class="outputBox">
                 <div class="convertionBox">
-                    <span class="outputTitle">変換後</span><span class="convertionDispArea" id="convertionDispArea"></span>
+                    <!-- <span class="outputTitle">変換後</span> -->
+                    <span class="convertionDispArea" id="convertionDispArea"></span>
                 </div>
             </div>
         </div>
         <div class="rightBox">
-            <div class="rightBoxList">
-                <span class="outputTitle">文字数</span>
-                <span class="stringDispArea" id="stringLengthArea">0</span>
-            </div>
-            <div class="rightBoxList">
-                <span class="outputTitle">文字数（半角）</span>
-                <span class="stringDispArea" id="stringHankakuArea">0</span>
-            </div>
-            <div class="rightBoxList">
-                <span class="outputTitle">文字数（全角）</span>
-                <span class="stringDispArea" id="stringZenkakuArea">0</span>
-            </div>
-            <div class="rightBoxList">
-                <span class="outputTitle">文字数（改行）</span>
-                <span class="stringDispArea" id="stringLineArea">0</span>
-            </div>
-            <div class="rightBoxList">
-                <span class="outputTitle">文字数（スペース）</span>
-                <span class="stringDispArea" id="stringSpaceArea">0</span>
-            </div>
-            <div class="rightBoxList">
-                <span class="outputTitle">バイト数（UTF-8）</span>
-                <span class="stringDispArea" id="stringByteArea">0</span>
-            </div>
-            <div class="rightBoxList">
-                <span class="outputTitle">バイト数（SJIS）</span>
-                <span class="stringDispArea" id="stringSjisArea">0</span>
-            </div>
-            <div class="rightBoxList">
-                <span class="outputTitle">文字数（カスタム）</span>
-                <span class="stringDispArea" id="stringCustomArea">0</span>
-            </div>
+            <form id="countForm">
+                <div class="rightBoxList">
+                    <span class="outputTitle">文字数</span>
+                    <span class="stringDispArea" id="stringLengthArea">0</span>
+                </div>
+                <div class="rightBoxList">
+                    <span class="outputTitle">文字数（半角）</span>
+                    <span class="stringDispArea" id="stringHankakuArea">0</span>
+                </div>
+                <div class="rightBoxList">
+                    <span class="outputTitle">文字数（全角）</span>
+                    <span class="stringDispArea" id="stringZenkakuArea">0</span>
+                </div>
+                <div class="rightBoxList">
+                    <span class="outputTitle">文字数（改行）</span>
+                    <span class="stringDispArea" id="stringLineArea">0</span>
+                </div>
+                <div class="rightBoxList">
+                    <span class="outputTitle">文字数（スペース）</span>
+                    <span class="stringDispArea" id="stringSpaceArea">0</span>
+                </div>
+                <div class="rightBoxList">
+                    <span class="outputTitle">バイト数（UTF-8）</span>
+                    <span class="stringDispArea" id="stringByteArea">0</span>
+                </div>
+                <div class="rightBoxList">
+                    <span class="outputTitle">バイト数（SJIS）</span>
+                    <span class="stringDispArea" id="stringSjisArea">0</span>
+                </div>
+                <div class="rightBoxList">
+                    <input type="input" name="custom1" id="custom1" placeholder="カウントしたい文字">
+                    <span class="stringDispArea" id="stringCustomArea1">0</span>
+                </div>
+            </form>
         </div>
     </div>
     <script type="module" src="../script/index/indexController.js"></script>
