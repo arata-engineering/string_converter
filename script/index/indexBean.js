@@ -110,7 +110,25 @@ export default class IndexBean {
         else if (charset === "length") {
             return inputWord.length;
         }
+        else if (charset === " " || charset === "\n") {
+            return this.getStringTargetWord(inputWord, charset);
+        }
         return 0;
+    }
+    /**
+    * カウント数(半角, 全角, SJIS(バイト))を取得します。
+    * @param str
+    * @param countUp
+    * @returns
+    */
+    getStringByCountType(str, countUp) {
+        let length = 0;
+        const isHankaku = (c) => (c >= 0x0 && c < 0x81) || (c === 0xf8f0) || (c >= 0xff61 && c < 0xffa0) || (c >= 0xf8f1 && c < 0xf8f4);
+        for (let i = 0; i < str.length; i++) {
+            let c = str.charCodeAt(i);
+            length = countUp(c, length, isHankaku);
+        }
+        return length;
     }
     /**
      * UTF-8のサイズを取得します。
@@ -120,20 +138,16 @@ export default class IndexBean {
     getStringToByteOfUtf8(str) {
         return new Blob([str], { type: 'text/plain' }).size;
     }
+    getStringTargetWord(str, target) {
+        return [...str].filter(c => c === target).length;
+    }
     /**
-     * カウント数(半角, 全角, SJIS(バイト))を取得します。
-     * @param str
-     * @param countUp
-     * @returns
+     * 半角か判定します。
+     * @param c
+     * @returns true:半角, false:半角以外
      */
-    getStringByCountType(str, countUp) {
-        let length = 0;
-        const isHankaku = c => (c >= 0x0 && c < 0x81) || (c === 0xf8f0) || (c >= 0xff61 && c < 0xffa0) || (c >= 0xf8f1 && c < 0xf8f4);
-        for (let i = 0; i < str.length; i++) {
-            let c = str.charCodeAt(i);
-            length = countUp(c, length, isHankaku);
-        }
-        return length;
+    isHankaku(c) {
+        return (c >= 0x0 && c < 0x81) || (c === 0xf8f0) || (c >= 0xff61 && c < 0xffa0) || (c >= 0xf8f1 && c < 0xf8f4);
     }
     /**
      * 半角の文字をカウントアップします。
@@ -156,7 +170,7 @@ export default class IndexBean {
      * @returns
      */
     countUpZenkakuChar(c, length, isHankaku) {
-        if (!isHankaku(c)) {
+        if (isHankaku(c)) {
             length += 1;
         }
         return length;

@@ -1,4 +1,4 @@
-import { Length, Sjis, Utf8 } from "../type/typer.js";
+import { Length, NewLine, Sjis, Space, Utf8 } from "../type/typer.js";
 import IndexBean from "./indexBean.js";
 
 document.getElementById("stringForm")?.addEventListener("input", inputExecute);
@@ -7,6 +7,8 @@ function inputExecute() {
     const utf8: Utf8 = "utf8";
     const sjis: Sjis = "sjis";
     const length: Length = "length";
+    const space: Space = " ";
+    const newLine: NewLine = "\n";
 
     // コンバート文字列
     indexBean.dispConvertedString();
@@ -16,8 +18,12 @@ function inputExecute() {
     indexBean.dispStringContents(utf8, "stringByteArea", null);
     // SJIS
     indexBean.dispStringContents(sjis, "stringSjisArea", indexBean.countUpSjis);
-    // 全角
+    // 文字数(全角)
     indexBean.dispStringContents(sjis, "stringZenkakuArea", indexBean.countUpZenkakuChar);
-    // 半角
+    // 文字数(半角)
     indexBean.dispStringContents(sjis, "stringHankakuArea", indexBean.countUpHankakuChar);
+    // 文字数(スペース)
+    indexBean.dispStringContents(space, "stringSpaceArea", null);
+    // 文字数(改行)
+    indexBean.dispStringContents(newLine, "stringLineArea", null);
 }

@@ -5,6 +5,8 @@ function inputExecute() {
     const utf8 = "utf8";
     const sjis = "sjis";
     const length = "length";
+    const space = " ";
+    const newLine = "\n";
     // コンバート文字列
     indexBean.dispConvertedString();
     // 文字数
@@ -13,8 +15,12 @@ function inputExecute() {
     indexBean.dispStringContents(utf8, "stringByteArea", null);
     // SJIS
     indexBean.dispStringContents(sjis, "stringSjisArea", indexBean.countUpSjis);
-    // 全角
+    // 文字数(全角)
     indexBean.dispStringContents(sjis, "stringZenkakuArea", indexBean.countUpZenkakuChar);
-    // 半角
+    // 文字数(半角)
     indexBean.dispStringContents(sjis, "stringHankakuArea", indexBean.countUpHankakuChar);
+    // 文字数(スペース)
+    indexBean.dispStringContents(space, "stringSpaceArea", null);
+    // 文字数(改行)
+    indexBean.dispStringContents(newLine, "stringLineArea", null);
 }

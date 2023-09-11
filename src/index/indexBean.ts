@@ -1,5 +1,5 @@
 import StringUtil from "../common/stringUtil.js";
-import { CountFunc, CountFuncUtf8, CountUp, HTMLFormElement_Null, HtmlElement_Null, IsHankaku, Length, Sjis, Utf8 } from "../type/typer.js";
+import { Charsets, CountFunc, CountFuncUtf8, CountUp, HTMLFormElement_Null, HtmlElement_Null, IsHankaku, Length, Sjis, Utf8 } from "../type/typer.js";
 
 export default class IndexBean {
 
@@ -71,7 +71,7 @@ export default class IndexBean {
      * @param count カウント方法
      * @returns 
      */
-    dispStringContents(charset: Sjis | Utf8 | Length, elementId: string, count: CountUp | null): void {
+    dispStringContents(charset: Charsets, elementId: string, count: CountUp | null): void {
         const textElement: HtmlElement_Null = document.getElementById("inputTextArea");
         const stringLengthArea: HtmlElement_Null = document.getElementById(elementId);
         // 入力エリア存在チェック
@@ -108,15 +108,33 @@ export default class IndexBean {
      * @param countUp カウントアップ種別
      * @returns カウント数
      */
-    controlCountFunc(charset: Sjis | Utf8 | Length, inputWord: string, countUp: CountUp | null): number {
+    controlCountFunc(charset: Charsets, inputWord: string, countUp: CountUp | null): number {
         if (charset === "sjis") {
             return this.getStringByCountType(inputWord, countUp!);
-        } else if(charset === "utf8") {
+        } else if (charset === "utf8") {
             return this.getStringToByteOfUtf8(inputWord);
-        } else if(charset === "length"){
+        } else if (charset === "length") {
             return inputWord.length;
-        }
+        } else if (charset === " " || charset === "\n") {
+            return this.getStringTargetWord(inputWord, charset);
+        } 
         return 0;
+    }
+
+    /**
+    * カウント数(半角, 全角, SJIS(バイト))を取得します。
+    * @param str 
+    * @param countUp 
+    * @returns 
+    */
+    getStringByCountType(str: string, countUp: CountUp): number {
+        let length: number = 0;
+        const isHankaku: IsHankaku = (c: number) => (c >= 0x0 && c < 0x81) || (c === 0xf8f0) || (c >= 0xff61 && c < 0xffa0) || (c >= 0xf8f1 && c < 0xf8f4);
+        for (let i = 0; i < str.length; i++) {
+            let c: number = str.charCodeAt(i);
+            length = countUp(c, length, isHankaku);
+        }
+        return length;
     }
 
     /**
@@ -125,23 +143,20 @@ export default class IndexBean {
      * @returns UTF-8のサイズ
      */
     getStringToByteOfUtf8(str: string): number {
-        return new Blob([str], {type: 'text/plain'}).size;
+        return new Blob([str], { type: 'text/plain' }).size;
+    }
+
+    getStringTargetWord(str: string, target: string): number {
+        return [...str].filter(c => c === target).length;
     }
 
     /**
-     * カウント数(半角, 全角, SJIS(バイト))を取得します。
-     * @param str 
-     * @param countUp 
-     * @returns 
+     * 半角か判定します。
+     * @param c
+     * @returns true:半角, false:半角以外
      */
-    getStringByCountType(str: string, countUp: CountUp): number {
-        let length: number = 0;
-        const isHankaku: IsHankaku = c => (c >= 0x0 && c < 0x81) || (c === 0xf8f0) || (c >= 0xff61 && c < 0xffa0) || (c >= 0xf8f1 && c < 0xf8f4);
-        for (let i = 0; i < str.length; i++) {
-          let c: number = str.charCodeAt(i);
-          length = countUp(c, length, isHankaku);
-        }
-        return length;
+    isHankaku(c: number): boolean {
+        return (c >= 0x0 && c < 0x81) || (c === 0xf8f0) || (c >= 0xff61 && c < 0xffa0) || (c >= 0xf8f1 && c < 0xf8f4);
     }
 
     /**
@@ -151,7 +166,7 @@ export default class IndexBean {
      * @param isHankaku 
      * @returns 
      */
-    countUpHankakuChar(c: number, length:number, isHankaku: IsHankaku): number {
+    countUpHankakuChar(c: number, length: number, isHankaku: IsHankaku): number {
         if (isHankaku(c)) {
             length += 1;
         }
@@ -165,8 +180,8 @@ export default class IndexBean {
      * @param isHankaku 
      * @returns 
      */
-    countUpZenkakuChar(c: number, length:number, isHankaku: IsHankaku): number {
-        if (!isHankaku(c)) {
+    countUpZenkakuChar(c: number, length: number, isHankaku: IsHankaku): number {
+        if (isHankaku(c)) {
             length += 1;
         }
         return length;
@@ -179,10 +194,10 @@ export default class IndexBean {
      * @param isHankaku 
      * @returns 
      */
-    countUpSjis(c: number, length:number, isHankaku: IsHankaku): number {
+    countUpSjis(c: number, length: number, isHankaku: IsHankaku): number {
         if (isHankaku(c)) {
             length += 1;
-          } else {
+        } else {
             length += 2;
         }
         return length;

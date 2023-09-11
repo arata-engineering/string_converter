@@ -16,7 +16,6 @@
             <div class="inputBox">
                 <form id="stringForm">
                     <div class="optionBox">
-                        <input type="submit" value="変換" class="convertButton">
                         <input type="radio" name="convert_type" value="upper" id="upper">
                         <label for="upper">:大文字</label>
                         <input type="radio" name="convert_type" value="lower" id="lower">
@@ -39,12 +38,20 @@
                 <span class="stringDispArea" id="stringLengthArea">0</span>
             </div>
             <div class="rightBoxList">
-                <span class="outputTitle">半角文字数</span>
+                <span class="outputTitle">文字数（半角）</span>
                 <span class="stringDispArea" id="stringHankakuArea">0</span>
             </div>
             <div class="rightBoxList">
-                <span class="outputTitle">全角文字数</span>
+                <span class="outputTitle">文字数（全角）</span>
                 <span class="stringDispArea" id="stringZenkakuArea">0</span>
+            </div>
+            <div class="rightBoxList">
+                <span class="outputTitle">文字数（改行）</span>
+                <span class="stringDispArea" id="stringLineArea">0</span>
+            </div>
+            <div class="rightBoxList">
+                <span class="outputTitle">文字数（スペース）</span>
+                <span class="stringDispArea" id="stringSpaceArea">0</span>
             </div>
             <div class="rightBoxList">
                 <span class="outputTitle">バイト数（UTF-8）</span>
@@ -53,6 +60,10 @@
             <div class="rightBoxList">
                 <span class="outputTitle">バイト数（SJIS）</span>
                 <span class="stringDispArea" id="stringSjisArea">0</span>
+            </div>
+            <div class="rightBoxList">
+                <span class="outputTitle">文字数（カスタム）</span>
+                <span class="stringDispArea" id="stringCustomArea">0</span>
             </div>
         </div>
     </div>

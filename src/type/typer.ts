@@ -15,3 +15,6 @@ export type CountUpUtf8 = (str: string)=>number;
 export type Length = "length";
 export type Sjis = "sjis";
 export type Utf8 = "utf8";
+export type Space = " ";
+export type NewLine = "\n";
+export type Charsets = Length | Sjis | Utf8 | Space | NewLine;
