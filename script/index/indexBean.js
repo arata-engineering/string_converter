@@ -58,55 +58,75 @@ export default class IndexBean {
         }
         return str;
     }
-    dispStringLength() {
+    /**
+     * カウント数を画面に表示させます。
+     * @param charset キャラセットによって文字列のカウント方法を動的に変更
+     * @param elementId カウント数を表示させる要素ID
+     * @param count カウント方法
+     * @returns
+     */
+    dispStringContents(charset, elementId, count) {
         const textElement = document.getElementById("inputTextArea");
-        const stringLengthArea = document.getElementById("stringLengthArea");
-        if (!this.existsDsipElement(textElement, stringLengthArea, () => console.error("id:stringLengthAreaが存在しません。"))) {
+        const stringLengthArea = document.getElementById(elementId);
+        // 入力エリア存在チェック
+        if (!this.existsDsipElement(textElement, stringLengthArea, elementId)) {
             return;
         }
         const str = textElement.value;
-        stringLengthArea.textContent = String(str.length);
+        stringLengthArea.textContent = String(this.controlCountFunc(charset, str, count));
     }
-    dispStringByte() {
-        const textElement = document.getElementById("inputTextArea");
-        const stringLengthArea = document.getElementById("stringByteArea");
-        if (!this.existsDsipElement(textElement, stringLengthArea, () => console.error("id:stringByteAreaが存在しません。"))) {
-            return;
+    /**
+     * 入力エリア、表示エリアが存在するか判定します。
+     * @param textElement 入力エリアの要素
+     * @param stringDispArea 出力エリアの要素
+     * @param elementId 出力エリア要素のID
+     * @returns true:存在する, false:存在しない
+     */
+    existsDsipElement(textElement, stringDispArea, elementId) {
+        if (textElement === null) {
+            console.error("id:inputTextAreaが存在しません。");
+            return false;
         }
-        const str = textElement.value;
-        stringLengthArea.textContent = String(this.changeStringToByte(str));
+        if (stringDispArea === null) {
+            console.error(`id:${elementId}が存在しません。`);
+            return false;
+        }
+        return true;
     }
-    changeStringToByte(str) {
+    /**
+     * キャラセットによってカウント方法のメソッドを切替えます。
+     * @param charset キャラセット
+     * @param inputWord 入力ワード
+     * @param countUp カウントアップ種別
+     * @returns カウント数
+     */
+    controlCountFunc(charset, inputWord, countUp) {
+        if (charset === "sjis") {
+            return this.getStringByCountType(inputWord, countUp);
+        }
+        else if (charset === "utf8") {
+            return this.getStringToByteOfUtf8(inputWord);
+        }
+        else if (charset === "length") {
+            return inputWord.length;
+        }
+        return 0;
+    }
+    /**
+     * UTF-8のサイズを取得します。
+     * @param str
+     * @returns UTF-8のサイズ
+     */
+    getStringToByteOfUtf8(str) {
         return new Blob([str], { type: 'text/plain' }).size;
     }
-    dispStringSjis() {
-        const textElement = document.getElementById("inputTextArea");
-        const stringLengthArea = document.getElementById("stringSjisArea");
-        if (!this.existsDsipElement(textElement, stringLengthArea, () => console.error("id:stringByteAreaが存在しません。"))) {
-            return;
-        }
-        const str = textElement.value;
-        stringLengthArea.textContent = String(this.changeStringToSjisByte(str, this.countUpSjis));
-    }
-    dispStringZenkaku() {
-        const textElement = document.getElementById("inputTextArea");
-        const stringLengthArea = document.getElementById("stringZenkakuArea");
-        if (!this.existsDsipElement(textElement, stringLengthArea, () => console.error("id:stringZenkakuAreaが存在しません。"))) {
-            return;
-        }
-        const str = textElement.value;
-        stringLengthArea.textContent = String(this.changeStringToSjisByte(str, this.countUpZenkakuChar));
-    }
-    dispStringHankaku() {
-        const textElement = document.getElementById("inputTextArea");
-        const stringLengthArea = document.getElementById("stringHankakuArea");
-        if (!this.existsDsipElement(textElement, stringLengthArea, () => console.error("id:stringHankakuAreaが存在しません。"))) {
-            return;
-        }
-        const str = textElement.value;
-        stringLengthArea.textContent = String(this.changeStringToSjisByte(str, this.countUpHankakuChar));
-    }
-    changeStringToSjisByte(str, countUp) {
+    /**
+     * カウント数(半角, 全角, SJIS(バイト))を取得します。
+     * @param str
+     * @param countUp
+     * @returns
+     */
+    getStringByCountType(str, countUp) {
         let length = 0;
         const isHankaku = c => (c >= 0x0 && c < 0x81) || (c === 0xf8f0) || (c >= 0xff61 && c < 0xffa0) || (c >= 0xf8f1 && c < 0xf8f4);
         for (let i = 0; i < str.length; i++) {
@@ -115,18 +135,39 @@ export default class IndexBean {
         }
         return length;
     }
+    /**
+     * 半角の文字をカウントアップします。
+     * @param c
+     * @param length
+     * @param isHankaku
+     * @returns
+     */
     countUpHankakuChar(c, length, isHankaku) {
         if (isHankaku(c)) {
             length += 1;
         }
         return length;
     }
+    /**
+     * 全角の文字をカウントアップします。
+     * @param c
+     * @param length
+     * @param isHankaku
+     * @returns
+     */
     countUpZenkakuChar(c, length, isHankaku) {
         if (!isHankaku(c)) {
             length += 1;
         }
         return length;
     }
+    /**
+     * SJISのバイト数をカウントアップします。
+     * @param c
+     * @param length
+     * @param isHankaku
+     * @returns
+     */
     countUpSjis(c, length, isHankaku) {
         if (isHankaku(c)) {
             length += 1;
@@ -135,16 +176,5 @@ export default class IndexBean {
             length += 2;
         }
         return length;
-    }
-    existsDsipElement(textElement, stringDispArea, errorLog) {
-        if (textElement === null) {
-            console.error("id:inputTextAreaが存在しません。");
-            return false;
-        }
-        if (stringDispArea === null) {
-            errorLog();
-            return false;
-        }
-        return true;
     }
 }
